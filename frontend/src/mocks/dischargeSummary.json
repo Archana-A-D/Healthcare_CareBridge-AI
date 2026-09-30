@@ -1,0 +1,71 @@
+{
+  "id": "DS-001",
+  "patient": {
+    "name": "Rahul Kumar",
+    "patientId": "IPD123456",
+    "age": 45,
+    "gender": "Male"
+  },
+  "hospital": {
+    "name": "City Care Hospital",
+    "department": "General Medicine"
+  },
+  "admissionDate": "2024-09-12",
+  "dischargeDate": "2024-09-20",
+  "summary": "The patient was admitted on 12 Sep 2024 for pneumonia. They received antibiotics and supportive care. The condition improved and the patient was discharged on 20 Sep 2024 with medications and follow-up advised after 2 weeks.",
+  "medications": [
+    {
+      "name": "Amoxicillin 500 mg",
+      "instructions": "1 tablet twice daily",
+      "duration": "5 days",
+      "timing": "Morning and Night",
+      "source": {
+        "page": 2
+      }
+    },
+    {
+      "name": "Paracetamol 500 mg",
+      "instructions": "1 tablet as needed",
+      "duration": "5 days",
+      "timing": "As needed",
+      "source": {
+        "page": 2
+      }
+    },
+    {
+      "name": "Pantoprazole 40 mg",
+      "instructions": "1 tablet once daily",
+      "duration": "10 days",
+      "timing": "Morning",
+      "source": {
+        "page": 2
+      }
+    }
+  ],
+  "followUp": {
+    "date": "2024-10-04",
+    "department": "General Medicine",
+    "instructions": [
+      "Review after 2 weeks"
+    ],
+    "tests": [
+      "Repeat chest X-ray if symptoms persist"
+    ],
+    "source": {
+      "page": 3
+    }
+  },
+  "instructions": [
+    "Take medicines as prescribed.",
+    "Maintain adequate hydration.",
+    "Rest and avoid strenuous activity.",
+    "Attend the follow-up appointment."
+  ],
+  "importantInformation": [
+    "Return to hospital if symptoms worsen.",
+    "Complete the prescribed course mentioned in the document."
+  ],
+  "missingInformation": [
+    "Allergy information not found in document."
+  ]
+}

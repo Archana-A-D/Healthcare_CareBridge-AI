@@ -1,0 +1,193 @@
+* {
+  box-sizing: border-box;
+}
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f8fa;
+  color: #1f2937;
+}
+
+/* Sidebar */
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 10px 30px;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f766e;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.brand h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.brand span {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Navigation */
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  border-radius: 9px;
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.nav-item span {
+  width: 20px;
+  text-align: center;
+}
+
+.nav-item:hover {
+  background: #f0fdfa;
+  color: #0f766e;
+}
+
+.nav-item.active {
+  background: #ccfbf1;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+/* Sidebar footer */
+
+.sidebar-footer {
+  margin-top: auto;
+}
+
+.safety-note {
+  padding: 14px;
+  border-radius: 10px;
+  background: #f0fdfa;
+}
+
+.safety-note strong {
+  font-size: 13px;
+}
+
+.safety-note p {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* Main */
+
+.main-section {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Header */
+
+.top-header {
+  height: 90px;
+  padding: 18px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-header h1 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.top-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.language-button {
+  border: 1px solid #d1d5db;
+  background: white;
+  padding: 9px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0f766e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.user-profile strong,
+.user-profile span {
+  display: block;
+}
+
+.user-profile strong {
+  font-size: 13px;
+}
+
+.user-profile span {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Content */
+
+.page-content {
+  padding: 30px 32px;
+}
