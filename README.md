@@ -54,6 +54,10 @@ The agent searches uploaded pages, reads structured medication and follow-up rec
 
 `python backend/api/eval_harness.py --output evaluation/retrieval-report.json` runs the 20-question synthetic retrieval check without Gemini. The chunk benchmark supports JSON output with `--output`. To generate v1/v2/v3 answer samples, run `python backend/api/eval_harness.py --answers --all-prompts --output evaluation/answer-quality.json`; this makes 60 answer generations plus embeddings, retries, and repairs. Optional Ragas scoring is documented in [`evaluation/README.md`](evaluation/README.md) and [`REQUIREMENTS.md`](REQUIREMENTS.md). These calls use Gemini quota and may incur cost. The 50-PDF synthetic text-processing run, session-continuity check, and five failure cases run through `python backend/manage.py test api` without Gemini calls; the current 50-PDF result is [here](evaluation/50-pdf-report.json). These synthetic scores are not clinical validation.
 
+The terminal screenshot below shows one 20-question synthetic retrieval run using the Unicode lexical fallback. It achieved 100% retrieval hit rate and recall, with 80% precision. These figures measure evidence/page retrieval for this fixture; they do not measure answer correctness or clinical accuracy. Latency is a local run snapshot, not a service-level guarantee.
+
+![Terminal evaluation summary showing synthetic retrieval hit rate 100%, recall 100%, and precision 80%](loadtest/Evaluation%20summary.png)
+
 Use Locust from the project root. The profile mixes concurrent health/usage API requests with a direct Redis SET/GET round trip. `GET /api/health/` also exercises Redis through Django. Locust reports Redis as its own operation alongside HTTP endpoint latencies:
 
 The screenshot below shows one completed Locust snapshot for the health and usage endpoints: 30 requests, 0 failures, 2.33 requests per second, and 250 ms aggregated p95 latency. These are results from this run only, not an SLA or a general performance guarantee.
