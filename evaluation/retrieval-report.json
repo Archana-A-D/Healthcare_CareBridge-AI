@@ -1,0 +1,15 @@
+{
+  "dataset": "synthetic discharge summary fixture",
+  "retriever": "Unicode lexical fallback",
+  "questions": 20,
+  "top_k": 2,
+  "retrieval_hit_rate": 1.0,
+  "retrieval_recall": 1.0,
+  "retrieval_precision": 0.8,
+  "latency_ms": {
+    "p50": 0.061,
+    "p95": 0.284,
+    "p99": 0.335
+  },
+  "scope": "retrieval evidence/page hit only; not answer correctness or clinical validation"
+}

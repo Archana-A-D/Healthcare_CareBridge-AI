@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-02",
+  "command": "python backend/manage.py test api",
+  "environment": "Windows local Django test runner; temporary SQLite test database",
+  "documents": 50,
+  "processed": 50,
+  "failures": 0,
+  "elapsed_ms": 1678.15,
+  "gemini_calls": 0,
+  "checks": ["PDF text extraction", "database persistence", "unique case marker retention", "page/chunk provenance"],
+  "limits": "Generated single-page text PDFs with mocked extraction summary; does not assess scanned-PDF OCR or generated-summary accuracy."
+}

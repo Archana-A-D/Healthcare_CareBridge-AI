@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Load-test artifacts and local documents; never commit patient PDFs or reports.
+loadtest/results/*.csv
+loadtest/results/*.html
+loadtest/results/*.json
+loadtest/results/.synthetic-summary-id
+loadtest/data/*.pdf

@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-02",
+  "command": "python backend/manage.py test api",
+  "environment": "Windows local Django test runner; temporary SQLite test database",
+  "regression_suite": {"tests": 25, "passed": 25, "gemini_calls": 0},
+  "session_continuity": {
+    "calls": 3,
+    "same_session": true,
+    "persisted_messages": 6,
+    "tool_iterations": [2, 3, 2],
+    "agent_duration_ms": [6.57, 5.82, 5.19],
+    "gemini_mocked": true
+  },
+  "failure_cases": ["empty corpus", "red-flag escalation", "injected provider outage", "invalid model output", "prompt injection in retrieved text"],
+  "failure_cases_passed": 5,
+  "tool_iteration_limit": 3,
+  "token_budget_check": {
+    "first_call_output_cap": 128,
+    "repair_call_output_cap": 64,
+    "total_cap": 192,
+    "input_tokens_logged": 8,
+    "output_tokens_logged": 10,
+    "correlation_id_shared": true
+  },
+  "query_embedding_cache": {
+    "cache_hit_skips_provider": true,
+    "cache_miss_persists_normalized_vector": true,
+    "ttl_seconds_tested": 60,
+    "latency_improvement_measured": false
+  },
+  "limits": "Mocked Gemini measures orchestration and persistence only; it does not establish live model latency or answer quality."
+}

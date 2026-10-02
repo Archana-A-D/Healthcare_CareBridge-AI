@@ -1,0 +1,62 @@
+{
+  "dataset": "three-page synthetic discharge summary; 20 fixed questions",
+  "retriever": "Unicode lexical fallback",
+  "metric_limit": "This microbenchmark informs chunk sizing for lexical retrieval only; it does not measure Gemini semantic retrieval or generated answer accuracy.",
+  "results": [
+    {
+      "chunk_chars": 300,
+      "chunk_count": 42,
+      "hit_rate_at_2": 1.0,
+      "evidence_precision_at_2": 0.8,
+      "latency_ms": {
+        "p50": 0.19,
+        "p95": 0.388,
+        "p99": 0.459
+      }
+    },
+    {
+      "chunk_chars": 500,
+      "chunk_count": 27,
+      "hit_rate_at_2": 1.0,
+      "evidence_precision_at_2": 0.8,
+      "latency_ms": {
+        "p50": 0.252,
+        "p95": 0.373,
+        "p99": 0.436
+      }
+    },
+    {
+      "chunk_chars": 700,
+      "chunk_count": 21,
+      "hit_rate_at_2": 1.0,
+      "evidence_precision_at_2": 0.8,
+      "latency_ms": {
+        "p50": 0.192,
+        "p95": 0.356,
+        "p99": 0.39
+      }
+    },
+    {
+      "chunk_chars": 1000,
+      "chunk_count": 15,
+      "hit_rate_at_2": 1.0,
+      "evidence_precision_at_2": 0.8,
+      "latency_ms": {
+        "p50": 0.19,
+        "p95": 0.377,
+        "p99": 0.519
+      }
+    },
+    {
+      "chunk_chars": 1500,
+      "chunk_count": 12,
+      "hit_rate_at_2": 1.0,
+      "evidence_precision_at_2": 0.8,
+      "latency_ms": {
+        "p50": 0.172,
+        "p95": 0.296,
+        "p99": 0.325
+      }
+    }
+  ]
+}

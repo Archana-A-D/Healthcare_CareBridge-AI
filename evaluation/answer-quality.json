@@ -1,0 +1,611 @@
+{
+  "dataset": "synthetic discharge summary fixture",
+  "retriever": "Unicode lexical fallback",
+  "questions": 20,
+  "top_k": 2,
+  "retrieval_hit_rate": 1.0,
+  "retrieval_recall": 1.0,
+  "retrieval_precision": 0.8,
+  "latency_ms": {
+    "p50": 0.016,
+    "p95": 0.022,
+    "p99": 0.105
+  },
+  "scope": "retrieval evidence/page hit only; not answer correctness or clinical validation; synthetic answer/citation checks are heuristic and not clinical validation",
+  "prompt_version_evaluation": {
+    "v1": {
+      "questions": 20,
+      "answer_correctness_rate": 0.9,
+      "citation_correctness_rate": 0.95,
+      "joint_correctness_rate": 0.9,
+      "latency_ms": {
+        "p50": 1856.362,
+        "p95": 3240.265,
+        "p99": 29463.549
+      },
+      "mean_tokens_per_question": {
+        "input": 444,
+        "output": 50
+      },
+      "mean_cost_usd_per_question": null,
+      "unpriced_questions": 20,
+      "scoring": "answer requires every expected term as a substring; citation requires the known page in retrieved pages and model citations",
+      "ragas_samples": [
+        {
+          "question": "What is the patient's name?",
+          "answer": "The patient's name is Rahul Kumar.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "rahul kumar"
+        },
+        {
+          "question": "What is the patient ID?",
+          "answer": "The patient ID is IPD123456.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "ipd123456"
+        },
+        {
+          "question": "When was the patient admitted?",
+          "answer": "The patient was admitted on 12 Sep 2024.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "12 sep 2024"
+        },
+        {
+          "question": "What is the discharge date?",
+          "answer": "The discharge date is September 20, 2024.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "20 sep 2024"
+        },
+        {
+          "question": "Which hospital treated the patient?",
+          "answer": "The patient was treated at City Care Hospital.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "city care hospital"
+        },
+        {
+          "question": "What diagnosis is listed?",
+          "answer": "The diagnoses listed are Community Acquired Pneumonia and Hypertension.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "pneumonia"
+        },
+        {
+          "question": "What condition is also listed?",
+          "answer": "The document also lists Hypertension (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "hypertension"
+        },
+        {
+          "question": "Which antibiotic is prescribed?",
+          "answer": "Amoxicillin 500 mg is prescribed.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "amoxicillin"
+        },
+        {
+          "question": "How often should amoxicillin be taken?",
+          "answer": "Amoxicillin 500 mg should be taken as 1 tablet twice daily for 5 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "twice daily"
+        },
+        {
+          "question": "How many days is amoxicillin prescribed?",
+          "answer": "Amoxicillin is prescribed for 5 days.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "5 days"
+        },
+        {
+          "question": "Which medicine is used as needed?",
+          "answer": "Paracetamol 500 mg is used as needed.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "paracetamol"
+        },
+        {
+          "question": "How often is pantoprazole taken?",
+          "answer": "Pantoprazole 40 mg is taken as 1 tablet once daily for 10 days.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "once daily"
+        },
+        {
+          "question": "How long should pantoprazole be taken?",
+          "answer": "Pantoprazole should be taken as 1 tablet once daily for 10 days.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "10 days"
+        },
+        {
+          "question": "When is the follow-up appointment?",
+          "answer": "The follow-up appointment is on 04 Oct 2024 for General Medicine.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "04 oct 2024"
+        },
+        {
+          "question": "Which department is the follow-up in?",
+          "answer": "The follow-up is in General Medicine.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "general medicine"
+        },
+        {
+          "question": "What imaging test should be repeated?",
+          "answer": "A repeat chest X-ray should be done.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "chest x-ray"
+        },
+        {
+          "question": "What should happen if symptoms persist?",
+          "answer": "If symptoms persist, you should get a blood test (page 3).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "blood test"
+        },
+        {
+          "question": "What symptoms are listed: fever, breathlessness, or chest pain?",
+          "answer": "Potential urgent symptom wording was detected. Please contact a qualified clinician or local emergency service now. CareBridge-AI cannot assess emergencies.",
+          "contexts": [],
+          "reference": "fever; breathlessness; chest pain"
+        },
+        {
+          "question": "What strenuous activity should be avoided?",
+          "answer": "The document states to avoid strenuous activity for 1 week.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "strenuous activity"
+        },
+        {
+          "question": "Was allergy information found?",
+          "answer": "No, allergy information was not found in the document.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "allergy information"
+        }
+      ],
+      "status": "complete"
+    },
+    "v2": {
+      "questions": 20,
+      "answer_correctness_rate": 0.8,
+      "citation_correctness_rate": 0.95,
+      "joint_correctness_rate": 0.8,
+      "latency_ms": {
+        "p50": 1977.698,
+        "p95": 6034.645,
+        "p99": 6888.187
+      },
+      "mean_tokens_per_question": {
+        "input": 447,
+        "output": 54
+      },
+      "mean_cost_usd_per_question": null,
+      "unpriced_questions": 20,
+      "scoring": "answer requires every expected term as a substring; citation requires the known page in retrieved pages and model citations",
+      "ragas_samples": [
+        {
+          "question": "What is the patient's name?",
+          "answer": "The patient's name is Rahul Kumar.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "rahul kumar"
+        },
+        {
+          "question": "What is the patient ID?",
+          "answer": "The patient ID is IPD123456.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "ipd123456"
+        },
+        {
+          "question": "When was the patient admitted?",
+          "answer": "The patient was admitted on September 12, 2024.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "12 sep 2024"
+        },
+        {
+          "question": "What is the discharge date?",
+          "answer": "The discharge date is September 20, 2024.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "20 sep 2024"
+        },
+        {
+          "question": "Which hospital treated the patient?",
+          "answer": "The patient was treated at City Care Hospital.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "city care hospital"
+        },
+        {
+          "question": "What diagnosis is listed?",
+          "answer": "The diagnoses listed are Community Acquired Pneumonia and Hypertension.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "pneumonia"
+        },
+        {
+          "question": "What condition is also listed?",
+          "answer": "Hypertension is also listed as a diagnosis in the document (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "hypertension"
+        },
+        {
+          "question": "Which antibiotic is prescribed?",
+          "answer": "The discharge summary records that Amoxicillin 500 mg is prescribed (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "amoxicillin"
+        },
+        {
+          "question": "How often should amoxicillin be taken?",
+          "answer": "According to the document, Amoxicillin 500 mg should be taken as 1 tablet twice daily for 5 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "twice daily"
+        },
+        {
+          "question": "How many days is amoxicillin prescribed?",
+          "answer": "Amoxicillin is prescribed for 5 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "5 days"
+        },
+        {
+          "question": "Which medicine is used as needed?",
+          "answer": "Paracetamol 500 mg is used as needed.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "paracetamol"
+        },
+        {
+          "question": "How often is pantoprazole taken?",
+          "answer": "Pantoprazole 40 mg is taken as 1 tablet once daily for 10 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "once daily"
+        },
+        {
+          "question": "How long should pantoprazole be taken?",
+          "answer": "Pantoprazole should be taken as 1 tablet once daily for 10 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "10 days"
+        },
+        {
+          "question": "When is the follow-up appointment?",
+          "answer": "The follow-up appointment is scheduled for October 4, 2024, in General Medicine.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "04 oct 2024"
+        },
+        {
+          "question": "Which department is the follow-up in?",
+          "answer": "The follow-up is in General Medicine.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "general medicine"
+        },
+        {
+          "question": "What imaging test should be repeated?",
+          "answer": "The document states that a chest X-ray should be repeated.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "chest x-ray"
+        },
+        {
+          "question": "What should happen if symptoms persist?",
+          "answer": "If symptoms persist, you should have a blood test (page 3). Also, you must return to the hospital if you experience fever, breathlessness, or chest pain (page 3).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "blood test"
+        },
+        {
+          "question": "What symptoms are listed: fever, breathlessness, or chest pain?",
+          "answer": "Potential urgent symptom wording was detected. Please contact a qualified clinician or local emergency service now. CareBridge-AI cannot assess emergencies.",
+          "contexts": [],
+          "reference": "fever; breathlessness; chest pain"
+        },
+        {
+          "question": "What strenuous activity should be avoided?",
+          "answer": "The document advises to rest and avoid strenuous activity for 1 week, but it does not specify which particular strenuous activities should be avoided.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "strenuous activity"
+        },
+        {
+          "question": "Was allergy information found?",
+          "answer": "No, allergy information was not found in the document.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "allergy information"
+        }
+      ],
+      "status": "complete"
+    },
+    "v3": {
+      "questions": 20,
+      "answer_correctness_rate": 0.9,
+      "citation_correctness_rate": 0.95,
+      "joint_correctness_rate": 0.9,
+      "latency_ms": {
+        "p50": 1932.82,
+        "p95": 11101.991,
+        "p99": 17492.789
+      },
+      "mean_tokens_per_question": {
+        "input": 469,
+        "output": 54
+      },
+      "mean_cost_usd_per_question": null,
+      "unpriced_questions": 20,
+      "scoring": "answer requires every expected term as a substring; citation requires the known page in retrieved pages and model citations",
+      "ragas_samples": [
+        {
+          "question": "What is the patient's name?",
+          "answer": "The patient's name is Rahul Kumar.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "rahul kumar"
+        },
+        {
+          "question": "What is the patient ID?",
+          "answer": "The patient ID is IPD123456.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "ipd123456"
+        },
+        {
+          "question": "When was the patient admitted?",
+          "answer": "The patient was admitted on 12 Sep 2024.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "12 sep 2024"
+        },
+        {
+          "question": "What is the discharge date?",
+          "answer": "The discharge date is September 20, 2024.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "20 sep 2024"
+        },
+        {
+          "question": "Which hospital treated the patient?",
+          "answer": "The patient was treated at City Care Hospital.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "city care hospital"
+        },
+        {
+          "question": "What diagnosis is listed?",
+          "answer": "The diagnosis listed in the document is Community Acquired Pneumonia and Hypertension (page 2).",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days."
+          ],
+          "reference": "pneumonia"
+        },
+        {
+          "question": "What condition is also listed?",
+          "answer": "Hypertension is also listed as a diagnosis in the document (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "hypertension"
+        },
+        {
+          "question": "Which antibiotic is prescribed?",
+          "answer": "The prescribed antibiotic is Amoxicillin 500 mg, to be taken as 1 tablet twice daily for 5 days.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "amoxicillin"
+        },
+        {
+          "question": "How often should amoxicillin be taken?",
+          "answer": "Amoxicillin 500 mg should be taken as one tablet twice daily for 5 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "twice daily"
+        },
+        {
+          "question": "How many days is amoxicillin prescribed?",
+          "answer": "Amoxicillin is prescribed for 5 days.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "5 days"
+        },
+        {
+          "question": "Which medicine is used as needed?",
+          "answer": "Paracetamol 500 mg is used as needed, as recorded on page 2.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "paracetamol"
+        },
+        {
+          "question": "How often is pantoprazole taken?",
+          "answer": "Pantoprazole 40 mg is taken as 1 tablet once daily for 10 days (page 2).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "once daily"
+        },
+        {
+          "question": "How long should pantoprazole be taken?",
+          "answer": "Pantoprazole should be taken as 1 tablet once daily for 10 days.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "10 days"
+        },
+        {
+          "question": "When is the follow-up appointment?",
+          "answer": "The follow-up appointment is scheduled for 04 Oct 2024 in General Medicine (page 3).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "04 oct 2024"
+        },
+        {
+          "question": "Which department is the follow-up in?",
+          "answer": "The follow-up is in General Medicine, as stated on page 3.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "general medicine"
+        },
+        {
+          "question": "What imaging test should be repeated?",
+          "answer": "A repeat chest X-ray should be done, as stated on page 3.",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "chest x-ray"
+        },
+        {
+          "question": "What should happen if symptoms persist?",
+          "answer": "If symptoms persist, you should have a blood test (page 3).",
+          "contexts": [
+            "Discharge Date 20 Sep 2024. Diagnosis: Community Acquired Pneumonia; Hypertension. Amoxicillin 500 mg: 1 tablet twice daily for 5 days. Paracetamol 500 mg: 1 tablet as needed for 5 days. Pantoprazole 40 mg: 1 tablet once daily for 10 days.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "blood test"
+        },
+        {
+          "question": "What symptoms are listed: fever, breathlessness, or chest pain?",
+          "answer": "Potential urgent symptom wording was detected. Please contact a qualified clinician or local emergency service now. CareBridge-AI cannot assess emergencies.",
+          "contexts": [],
+          "reference": "fever; breathlessness; chest pain"
+        },
+        {
+          "question": "What strenuous activity should be avoided?",
+          "answer": "The document states that you should avoid strenuous activity for 1 week (page 3).",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "strenuous activity"
+        },
+        {
+          "question": "Was allergy information found?",
+          "answer": "No, allergy information was not found in the document.",
+          "contexts": [
+            "Patient Rahul Kumar, ID IPD123456. Admission Date 12 Sep 2024. Hospital City Care Hospital.",
+            "Follow-up 04 Oct 2024, General Medicine. Repeat chest X-ray. Blood test if symptoms persist. Return to hospital for fever, breathlessness or chest pain. Rest and avoid strenuous activity for 1 week. Allergy information not found in document."
+          ],
+          "reference": "allergy information"
+        }
+      ],
+      "status": "complete"
+    }
+  }
+}

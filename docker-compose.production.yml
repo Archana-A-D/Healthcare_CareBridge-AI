@@ -1,0 +1,51 @@
+services:
+  mysql:
+    environment:
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set a production MySQL password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set a production MySQL root password}
+
+  backend:
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set a unique production Django secret}
+      DJANGO_DEBUG: "false"
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?Set allowed hostnames}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:?Set trusted HTTPS origins}
+      DJANGO_SECURE_SSL_REDIRECT: "true"
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set a production MySQL password}
+      SECURE_HSTS_SECONDS: "31536000"
+      SECURE_HSTS_INCLUDE_SUBDOMAINS: "true"
+      SECURE_HSTS_PRELOAD: "true"
+      EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+      EMAIL_HOST: ${EMAIL_HOST:-}
+      EMAIL_PORT: ${EMAIL_PORT:-587}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER:-}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:-}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS:-true}
+      EMAIL_USE_SSL: ${EMAIL_USE_SSL:-false}
+
+  worker:
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set a unique production Django secret}
+      DJANGO_DEBUG: "false"
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set a production MySQL password}
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?Set the public DNS name for automatic HTTPS}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      frontend:
+        condition: service_started
+
+volumes:
+  caddy_data:
+  caddy_config:

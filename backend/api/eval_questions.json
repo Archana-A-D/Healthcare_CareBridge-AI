@@ -1,0 +1,22 @@
+[
+  {"id":"q01","question":"What is the patient's name?","expected_terms":["rahul kumar"],"page":1},
+  {"id":"q02","question":"What is the patient ID?","expected_terms":["ipd123456"],"page":1},
+  {"id":"q03","question":"When was the patient admitted?","expected_terms":["12 sep 2024"],"page":1},
+  {"id":"q04","question":"What is the discharge date?","expected_terms":["20 sep 2024"],"page":2},
+  {"id":"q05","question":"Which hospital treated the patient?","expected_terms":["city care hospital"],"page":1},
+  {"id":"q06","question":"What diagnosis is listed?","expected_terms":["pneumonia"],"page":2},
+  {"id":"q07","question":"What condition is also listed?","expected_terms":["hypertension"],"page":2},
+  {"id":"q08","question":"Which antibiotic is prescribed?","expected_terms":["amoxicillin"],"page":2},
+  {"id":"q09","question":"How often should amoxicillin be taken?","expected_terms":["twice daily"],"page":2},
+  {"id":"q10","question":"How many days is amoxicillin prescribed?","expected_terms":["5 days"],"page":2},
+  {"id":"q11","question":"Which medicine is used as needed?","expected_terms":["paracetamol"],"page":2},
+  {"id":"q12","question":"How often is pantoprazole taken?","expected_terms":["once daily"],"page":2},
+  {"id":"q13","question":"How long should pantoprazole be taken?","expected_terms":["10 days"],"page":2},
+  {"id":"q14","question":"When is the follow-up appointment?","expected_terms":["04 oct 2024"],"page":3},
+  {"id":"q15","question":"Which department is the follow-up in?","expected_terms":["general medicine"],"page":3},
+  {"id":"q16","question":"What imaging test should be repeated?","expected_terms":["chest x-ray"],"page":3},
+  {"id":"q17","question":"What should happen if symptoms persist?","expected_terms":["blood test"],"page":3},
+  {"id":"q18","question":"What symptoms are listed: fever, breathlessness, or chest pain?","expected_terms":["fever", "breathlessness", "chest pain"],"page":3},
+  {"id":"q19","question":"What strenuous activity should be avoided?","expected_terms":["strenuous activity"],"page":3},
+  {"id":"q20","question":"Was allergy information found?","expected_terms":["allergy information"],"page":3}
+]

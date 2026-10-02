@@ -11,21 +11,39 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+ENV_FILE = BASE_DIR / '.env'
+if ENV_FILE.exists():
+    for line in ENV_FILE.read_text(encoding='utf-8').splitlines():
+        line = line.strip()
+        if line and not line.startswith('#') and '=' in line:
+            key, value = line.split('=', 1)
+            os.environ.setdefault(key.strip(), value.strip().strip('"\''))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ts&#j&(dijkjy=ch)7-u^ynr_ipiy8+0^#0!hdbb=hb_g#d8ok'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-only-carebridge-key-change-before-deploy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'true').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+CSRF_TRUSTED_ORIGINS = [origin for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if origin]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = os.getenv('DJANGO_SECURE_SSL_REDIRECT', 'false').lower() == 'true'
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '0'))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'false').lower() == 'true'
+SECURE_HSTS_PRELOAD = os.getenv('SECURE_HSTS_PRELOAD', 'false').lower() == 'true'
 
 
 # Application definition
@@ -45,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'api.middleware.CorrelationAndRateLimitMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -74,12 +93,29 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('DB_ENGINE', 'sqlite').lower() == 'mysql':
+    import pymysql
+
+    pymysql.install_as_MySQLdb()
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('MYSQL_DATABASE', 'carebridge'),
+            'USER': os.getenv('MYSQL_USER', 'carebridge'),
+            'PASSWORD': os.getenv('MYSQL_PASSWORD', 'carebridge-dev-only'),
+            'HOST': os.getenv('MYSQL_HOST', 'mysql'),
+            'PORT': os.getenv('MYSQL_PORT', '3306'),
+            'OPTIONS': {'charset': 'utf8mb4'},
+            'CONN_MAX_AGE': 60,
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.getenv('DJANGO_DB_PATH', str(BASE_DIR / 'db.sqlite3')),
+        }
+    }
 
 
 # Password validation
@@ -118,14 +154,51 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Shared cache across all Gunicorn workers/containers. Redis stores only cache
+# entries here; patient documents remain in the database.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/0'),
+        'OPTIONS': {
+            'socket_connect_timeout': 1,
+            'socket_timeout': 1,
+        },
+    },
+}
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/0'))
+CELERY_RESULT_BACKEND = None
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_ACKS_LATE = True
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_TASK_TIME_LIMIT = 240
+CELERY_TASK_SOFT_TIME_LIMIT = 210
+CELERY_TASK_IGNORE_RESULT = True
+
+AI_RATE_LIMIT_PER_MINUTE = int(os.getenv('AI_RATE_LIMIT_PER_MINUTE', '60'))
+GEMINI_MAX_OUTPUT_TOKENS = int(os.getenv('GEMINI_MAX_OUTPUT_TOKENS', '1024'))
+GEMINI_MAX_PROMPT_CHARS = int(os.getenv('GEMINI_MAX_PROMPT_CHARS', '24000'))
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = Path(os.getenv('DJANGO_MEDIA_ROOT', str(BASE_DIR / 'media')))
+
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',')
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
 MAILERS = {
     'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        'BACKEND': os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend'),
+        'HOST': os.getenv('EMAIL_HOST', ''),
+        'PORT': int(os.getenv('EMAIL_PORT', '25')),
+        'USERNAME': os.getenv('EMAIL_HOST_USER', ''),
+        'PASSWORD': os.getenv('EMAIL_HOST_PASSWORD', ''),
+        'USE_TLS': os.getenv('EMAIL_USE_TLS', 'false').lower() == 'true',
+        'USE_SSL': os.getenv('EMAIL_USE_SSL', 'false').lower() == 'true',
     },
 }

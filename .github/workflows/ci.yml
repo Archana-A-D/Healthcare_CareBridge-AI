@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - run: python manage.py check
+      - run: python manage.py test api
+      - run: python api/eval_harness.py --output ../evaluation/retrieval-report.json
+      - run: python api/chunk_benchmark.py --output ../evaluation/chunk-size-benchmark.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: carebridge-evaluation-reports
+          path: evaluation/*.json
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build

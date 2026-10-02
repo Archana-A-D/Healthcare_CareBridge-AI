@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: CareBridge-AI API
+  version: 1.0.0
+  description: Document grounded discharge summary explanation. Not a diagnostic service.
+servers:
+  - url: http://localhost:8000
+paths:
+  /api/health/:
+    get:
+      summary: Backend and Redis health
+      responses:
+        "200": { description: Healthy }
+        "503": { description: Redis unavailable }
+  /api/upload-jobs/:
+    post:
+      summary: Queue a PDF extraction job
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        "202": { description: Job accepted; poll /api/agent/jobs/{jobId}/ }
+        "400": { description: Invalid PDF }
+        "503": { description: Worker unavailable }
+  /api/upload/:
+    post:
+      summary: Synchronous PDF extraction (compatibility endpoint)
+      responses:
+        "200": { description: Processed discharge summary }
+        "400": { description: Invalid PDF }
+  /api/agent/jobs/:
+    post:
+      summary: Queue a document question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentQuery'
+      responses:
+        "202": { description: Job accepted }
+        "400": { description: Invalid request }
+  /api/translation-jobs/:
+    post:
+      summary: Queue a summary translation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [summaryId, language]
+              properties:
+                summaryId: { type: string, format: uuid }
+                language: { type: string, enum: [en, ml, ta, hi] }
+      responses:
+        "202": { description: Translation job accepted }
+        "400": { description: Invalid request }
+  /api/agent/jobs/{jobId}/:
+    get:
+      summary: Poll an AI job
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: queued, running, succeeded, or failed job state }
+        "404": { description: Job not found }
+  /api/agent/query/:
+    post:
+      summary: Synchronous document question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AgentQuery' }
+      responses:
+        "200":
+          description: Validated answer, source page citations, and bounded orchestration metrics
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AgentAnswerResponse' }
+  /api/discharge-summaries/{summaryId}/translate/:
+    post:
+      summary: Translate extracted discharge details
+      parameters:
+        - in: path
+          name: summaryId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [language]
+              properties:
+                language: { type: string, enum: [en, ml, ta, hi] }
+      responses:
+        "200": { description: Translated structured summary }
+  /api/agent/usage/:
+    get:
+      summary: Aggregate model token usage and configured estimated cost
+      responses:
+        "200": { description: Usage totals }
+components:
+  schemas:
+    AgentQuery:
+      type: object
+      additionalProperties: false
+      required: [summaryId, question]
+      properties:
+        summaryId: { type: string, format: uuid }
+        question: { type: string, minLength: 1, maxLength: 2000 }
+        language: { type: string, enum: [en, ml, ta, hi], default: en }
+        sessionId: { type: [string, "null"], format: uuid }
+    AgentAnswerResponse:
+      type: object
+      required: [answer, sources, retrievedPages, sessionId, requiresHumanReview, toolTrace, toolIterations, agentDurationMs]
+      properties:
+        answer: { type: string }
+        sources:
+          type: array
+          items:
+            type: object
+            required: [page, section]
+            properties:
+              page: { type: integer, minimum: 1 }
+              section: { type: string }
+        retrievedPages: { type: array, items: { type: integer, minimum: 1 } }
+        sessionId: { type: string, format: uuid }
+        requiresHumanReview: { type: boolean }
+        toolTrace: { type: array, items: { type: string } }
+        toolIterations: { type: integer, minimum: 0, maximum: 3 }
+        agentDurationMs: { type: number, minimum: 0 }

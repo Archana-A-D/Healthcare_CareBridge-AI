@@ -1,0 +1,131 @@
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - carebridge_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mysql:
+    image: mysql:8.4
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_0900_ai_ci"]
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-carebridge}
+      MYSQL_USER: ${MYSQL_USER:-carebridge}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-carebridge-local-only}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root-local-only}
+    volumes:
+      - carebridge_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-carebridge-key-change-before-deployment}
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      DJANGO_DB_PATH: /app/data/db.sqlite3
+      DJANGO_MEDIA_ROOT: /app/data/media
+      DB_ENGINE: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-carebridge}
+      MYSQL_USER: ${MYSQL_USER:-carebridge}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-carebridge-local-only}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      AI_RATE_LIMIT_PER_MINUTE: ${AI_RATE_LIMIT_PER_MINUTE:-60}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+      GUNICORN_THREADS: ${GUNICORN_THREADS:-4}
+    volumes:
+      - carebridge_data:/app/data
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import Request, urlopen; urlopen(Request('http://127.0.0.1:8000/api/health/', headers={'X-Forwarded-Proto': 'https'}), timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  worker:
+    build:
+      context: ./backend
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-carebridge-key-change-before-deployment}
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      DJANGO_MEDIA_ROOT: /app/data/media
+      DB_ENGINE: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-carebridge}
+      MYSQL_USER: ${MYSQL_USER:-carebridge}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-carebridge-local-only}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+    volumes:
+      - carebridge_data:/app/data
+    command: ["celery", "-A", "config", "worker", "--loglevel=INFO", "--concurrency=${CELERY_CONCURRENCY:-2}"]
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-8080}:80"
+
+  locust:
+    build:
+      context: ./loadtest
+    profiles: ["loadtest"]
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      LOAD_TEST_SUMMARY_ID: ${LOAD_TEST_SUMMARY_ID:-}
+      LOAD_TEST_PDF: ${LOAD_TEST_PDF:-}
+      LOAD_TEST_TRANSLATION: ${LOAD_TEST_TRANSLATION:-0}
+      LOAD_TEST_ASYNC: ${LOAD_TEST_ASYNC:-1}
+      LOAD_TEST_QUERY_LIMIT_PER_USER: ${LOAD_TEST_QUERY_LIMIT_PER_USER:-1}
+      LOAD_TEST_REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./loadtest/data:/data:ro
+      - ./loadtest/results:/results
+    ports:
+      - "8089:8089"
+    command: ["-f", "/loadtest/locustfile.py", "--host", "http://backend:8000", "--web-host", "0.0.0.0"]
+
+volumes:
+  carebridge_data:
+  carebridge_redis:
+  carebridge_mysql:

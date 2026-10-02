@@ -1,0 +1,6 @@
+{$SITE_ADDRESS} {
+	encode zstd gzip
+	reverse_proxy frontend:80 {
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

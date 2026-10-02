@@ -1,0 +1,37 @@
+{
+  "info": {
+    "name": "CareBridge-AI API",
+    "description": "Local API collection. Set baseUrl and upload a PDF before using summaryId requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "summaryId", "value": "" },
+    { "key": "jobId", "value": "" },
+    { "key": "sessionId", "value": "" }
+  ],
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/api/health/" } },
+    {
+      "name": "Upload PDF (async)",
+      "request": { "method": "POST", "header": [], "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": "" }] }, "url": "{{baseUrl}}/api/upload-jobs/" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["if (pm.response.code === 202) { pm.collectionVariables.set('jobId', pm.response.json().jobId); }"] } }]
+    },
+    {
+      "name": "Poll job",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/agent/jobs/{{jobId}}/" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const body = pm.response.json();", "if (body.status === 'succeeded' && body.result && body.result.summaryId) pm.collectionVariables.set('summaryId', body.result.summaryId);", "if (body.status === 'succeeded' && body.result && body.result.sessionId) pm.collectionVariables.set('sessionId', body.result.sessionId);"] } }]
+    },
+    {
+      "name": "Ask document question (async)",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"summaryId\": \"{{summaryId}}\",\n  \"question\": \"What medicines are mentioned?\",\n  \"language\": \"en\",\n  \"sessionId\": \"{{sessionId}}\"\n}" }, "url": "{{baseUrl}}/api/agent/jobs/" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["if (pm.response.code === 202) pm.collectionVariables.set('jobId', pm.response.json().jobId);"] } }]
+    },
+    {
+      "name": "Translate summary",
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"summaryId\": \"{{summaryId}}\",\n  \"language\": \"ta\"\n}" }, "url": "{{baseUrl}}/api/translation-jobs/" },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["if (pm.response.code === 202) pm.collectionVariables.set('jobId', pm.response.json().jobId);"] } }]
+    },
+    { "name": "Usage totals", "request": { "method": "GET", "url": "{{baseUrl}}/api/agent/usage/" } }
+  ]
+}
