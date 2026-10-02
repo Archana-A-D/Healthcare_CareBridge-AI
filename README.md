@@ -56,6 +56,10 @@ The agent searches uploaded pages, reads structured medication and follow-up rec
 
 Use Locust from the project root. The profile mixes concurrent health/usage API requests with a direct Redis SET/GET round trip. `GET /api/health/` also exercises Redis through Django. Locust reports Redis as its own operation alongside HTTP endpoint latencies:
 
+The screenshot below shows one completed Locust snapshot for the health and usage endpoints: 30 requests, 0 failures, 2.33 requests per second, and 250 ms aggregated p95 latency. These are results from this run only, not an SLA or a general performance guarantee.
+
+![Locust statistics for a health and usage endpoint run: 30 requests, zero failures, and 250 ms aggregated p95 latency](loadtest/locust-statistics.png)
+
 ```powershell
 docker compose --profile loadtest up --build
 ```
