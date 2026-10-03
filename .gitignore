@@ -223,3 +223,7 @@ loadtest/results/*.html
 loadtest/results/*.json
 loadtest/results/.synthetic-summary-id
 loadtest/data/*.pdf
+
+venv/
+node_modules/
+backend/media/queued/
