@@ -17,6 +17,8 @@ python backend/manage.py test api.tests.PdfProcessingTests.test_token_budget_bou
 
 The PDF test covers text extraction, persistence, and page/chunk provenance for 50 one-page synthetic PDFs. Its AI summary response is mocked, so it does not score OCR or generated summaries. The continuity and token-budget tests use mocked Gemini and verify session persistence, tool-step counts, configured output caps, token logging, and orchestration latency; they do not establish live Gemini latency or cost.
 
+The retrieval harness prints a terminal summary with hit rate, recall, and precision as percentages, plus p50/p95/p99 latency. Its `--output` option also saves the detailed metrics as JSON. Retrieval scores measure evidence/page matching, not generated-answer correctness or clinical accuracy.
+
 ## Generated answers, prompt versions, and Ragas
 
 Put a Gemini key in `backend/.env`; the evaluation harness loads it without printing it. Configure current token rates if cost reporting is needed. Install optional dependencies with Python 3.12 using `python -m pip install -r evaluation/requirements-ragas.txt`, or use the provided evaluator container: build with `docker build -f evaluation/Dockerfile.ragas -t carebridge-ragas-eval evaluation`, then run the Ragas command in a container with the repository mounted at `/workspace`.

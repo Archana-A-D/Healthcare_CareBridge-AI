@@ -7,9 +7,9 @@
   "retrieval_recall": 1.0,
   "retrieval_precision": 0.8,
   "latency_ms": {
-    "p50": 0.061,
-    "p95": 0.284,
-    "p99": 0.335
+    "p50": 0.016,
+    "p95": 0.024,
+    "p99": 0.107
   },
   "scope": "retrieval evidence/page hit only; not answer correctness or clinical validation"
 }

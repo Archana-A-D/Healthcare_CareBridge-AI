@@ -204,10 +204,38 @@ def run():
             document.delete()
         report["prompt_version_evaluation"] = version_reports
         report["scope"] += "; synthetic answer/citation checks are heuristic and not clinical validation"
-    print(json.dumps(report, indent=2))
+    as_percent = lambda value: f"{value * 100:.1f}%"
+    print("Evaluation summary")
+    print(f"Dataset: {report['dataset']}")
+    print(f"Retriever: {report['retriever']}")
+    print(f"Questions: {report['questions']}")
+    print(f"Retrieval hit rate: {as_percent(report['retrieval_hit_rate'])}")
+    print(f"Retrieval recall: {as_percent(report['retrieval_recall'])}")
+    print(f"Retrieval precision: {as_percent(report['retrieval_precision'])}")
+    print(
+        "Retrieval latency: "
+        f"p50 {report['latency_ms']['p50']} ms, "
+        f"p95 {report['latency_ms']['p95']} ms, "
+        f"p99 {report['latency_ms']['p99']} ms"
+    )
+    for version, result in report.get("prompt_version_evaluation", {}).items():
+        print(f"Answer evaluation ({version}, {result['questions']} questions):")
+        print(f"  Answer correctness: {as_percent(result['answer_correctness_rate'])}")
+        print(f"  Citation correctness: {as_percent(result['citation_correctness_rate'])}")
+        print(f"  Joint correctness: {as_percent(result['joint_correctness_rate'])}")
+        print(
+            "  Answer latency: "
+            f"p50 {result['latency_ms']['p50']} ms, "
+            f"p95 {result['latency_ms']['p95']} ms, "
+            f"p99 {result['latency_ms']['p99']} ms"
+        )
+        cost = result["mean_cost_usd_per_question"]
+        print(f"  Mean cost per query: ${cost:.6f}" if cost is not None else "  Mean cost per query: not priced")
+    print(f"Scope: {report['scope']}")
     if options.output:
         options.output.parent.mkdir(parents=True, exist_ok=True)
         options.output.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(f"Detailed JSON report saved to: {options.output}")
     return report
 
 
